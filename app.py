@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
+
 app = Flask(__name__)
 app.secret_key = "fitai_secret_key"
 
@@ -36,7 +37,6 @@ def init_db():
     conn.commit()
     conn.close()
 
-
 init_db()
 
 
@@ -51,15 +51,12 @@ def save_progress(user_id, name, age, weight, bmi, score, goal):
 
     c.execute("""
     INSERT INTO progress
-    (user_id,name,age,weight,bmi,score,goal)
-    VALUES (?,?,?,?,?,?,?)
-    """,
-    (user_id, name, age, weight, bmi, score, goal))
+    (user_id, name, age, weight, bmi, score, goal)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    """, (user_id, name, age, weight, bmi, score, goal))
 
     conn.commit()
     conn.close()
-
-
 
 
 # ==========================
@@ -72,7 +69,7 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
 
-    email = request.form["email"]
+    username = request.form["username"]
     password = request.form["password"]
 
     conn = sqlite3.connect("fitness.db")
@@ -80,19 +77,49 @@ def register():
 
     try:
         c.execute(
-            "INSERT INTO users(email, password) VALUES (?, ?)",
-            (email, password)
+            "INSERT INTO users(username, password) VALUES (?, ?)",
+            (username, password)
         )
         conn.commit()
 
-    except Exception as e:
-        return str(e)
-
-    finally:
+    except sqlite3.IntegrityError:
         conn.close()
+        return "Username already exists"
+
+    conn.close()
 
     return redirect("/login")
-    
+
+
+# ==========================
+# LOGIN
+# ==========================
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+
+    if request.method == "GET":
+        return render_template("login.html")
+
+    username = request.form["username"]
+    password = request.form["password"]
+
+    conn = sqlite3.connect("fitness.db")
+    c = conn.cursor()
+
+    c.execute(
+        "SELECT * FROM users WHERE username=? AND password=?",
+        (username, password)
+    )
+
+    user = c.fetchone()
+    conn.close()
+
+    if user:
+        session["user_id"] = user[0]
+        return redirect("/dashboard")
+
+    return "Invalid username or password"
 
 
 # ==========================
@@ -101,9 +128,21 @@ def register():
 
 @app.route("/logout")
 def logout():
-
     session.clear()
     return redirect("/login")
+
+
+# ==========================
+# DASHBOARD
+# ==========================
+
+@app.route("/dashboard")
+def dashboard():
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    return render_template("dashboard.html")
 
 
 # ==========================
@@ -112,7 +151,7 @@ def logout():
 
 @app.route("/", methods=["GET", "POST"])
 def planner():
-    print("REQUEST:", request.method)
+
     if "user_id" not in session:
         return redirect("/login")
 
@@ -127,7 +166,6 @@ def planner():
         time = int(request.form["time"])
         equipment = request.form["equipment"]
 
-        # BMI
         height_m = height / 100
         bmi = weight / (height_m ** 2)
 
@@ -140,7 +178,6 @@ def planner():
         else:
             bmi_status = "Obese"
 
-        # FITNESS SCORE
         score = 100
 
         if bmi < 18.5:
@@ -153,13 +190,9 @@ def planner():
 
         score = max(score, 0)
 
-        # WATER
         water = round(weight * 0.033, 1)
-
-        # CALORIES
         calories = int(weight * 30)
 
-        # BADGE
         if score >= 95:
             badge = "🏆 Elite Fitness"
         elif score >= 85:
@@ -169,67 +202,8 @@ def planner():
         else:
             badge = "🥉 Beginner Journey"
 
-        # WORKOUT + DIET
-        if goal == "Weight Loss":
-
-            workout = """
-            🔥 Jumping Jacks - 3 x 30 sec<br>
-            🏃 High Knees - 3 x 30 sec<br>
-            ⛰️ Mountain Climbers - 3 x 20<br>
-            💪 Burpees - 3 x 10
-            """
-
-            diet = """
-            🥣 Oatmeal + Fruits<br>
-            🥗 Grilled Chicken Salad<br>
-            🍲 Vegetable Soup<br>
-            🍎 Healthy Snacks
-            """
-
-        elif goal == "Muscle Gain":
-
-            workout = """
-            💪 Push-Ups - 4 x 12<br>
-            🦵 Squats - 4 x 15<br>
-            🚶 Lunges - 3 x 12<br>
-            🧱 Plank - 3 x 45 sec
-            """
-
-            diet = """
-            🥚 Eggs + Banana Shake<br>
-            🍚 Chicken + Rice<br>
-            🐟 Fish + Sweet Potato<br>
-            🥛 Protein-Rich Snacks
-            """
-
-        elif goal == "Strength":
-
-            workout = """
-            🏋️ Push-Ups - 5 x 20<br>
-            🦵 Squats - 5 x 25<br>
-            🔥 Burpees - 4 x 15<br>
-            🧱 Plank - 5 x 60 sec
-            """
-
-            diet = """
-            🍳 High Protein Breakfast<br>
-            🍗 Lean Meat Lunch<br>
-            🥩 Protein-Rich Dinner
-            """
-
-        else:
-
-            workout = """
-            🚶 Walking - 20 Minutes<br>
-            🧘 Stretching - 10 Minutes<br>
-            🌿 Yoga - 15 Minutes
-            """
-
-            diet = """
-            🥗 Balanced Meals<br>
-            🍎 Fresh Fruits<br>
-            🥛 Plenty of Water
-            """
+        workout = "Push Ups, Squats, Plank"
+        diet = "Protein Rich Diet"
 
         save_progress(
             session["user_id"],
@@ -286,7 +260,7 @@ def history():
 
 
 # ==========================
-# ABOUT
+# OTHER PAGES
 # ==========================
 
 @app.route("/about")
@@ -294,38 +268,34 @@ def about():
     return render_template("about.html")
 
 
-# ==========================
-# EXERCISE LIBRARY
-# ==========================
-
 @app.route("/exercises")
 def exercise_library():
     return render_template("exercise_library.html")
 
 
-# ==========================
-# AI COACH
-# ==========================
-
 @app.route("/coach")
 def coach():
     return render_template("coach.html")
 
+
 @app.route("/progress")
 def progress():
     return render_template("progress.html")
-@app.route("/dashboard")
-def dashboard():
-    return render_template("dashboard.html")
+
+
 @app.route("/nutrition")
 def nutrition():
     return render_template("nutrition.html")
-@app.route("/login")
-def login():
-    return render_template("login.html")
+
+
 @app.route("/profile")
 def profile():
     return render_template("profile.html")
 
+
+# ==========================
+# RUN
+# ==========================
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
