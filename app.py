@@ -101,27 +101,27 @@ def register():
 
     if request.method == "GET":
         return render_template("register.html")
-        username = request.form["username"]
-        password = request.form["password"]
 
-        conn = sqlite3.connect("fitness.db")
-        c = conn.cursor()
+    username = request.form["username"]
+    password = request.form["password"]
 
-        try:
-            c.execute(
-                "INSERT INTO users(email,password) VALUES (?,?)",
-                (username, password)
-            )
-            conn.commit()
+    conn = sqlite3.connect("fitness.db")
+    c = conn.cursor()
 
-        except:
-            return "Username already exists"
+    try:
+        c.execute(
+            "INSERT INTO users(email,password) VALUES (?,?)",
+            (username, password)
+        )
+        conn.commit()
 
-        finally:
-            conn.close()
+    except:
+        return "Username already exists"
 
-        return redirect("/login")
+    finally:
+        conn.close()
 
+    return redirect("/login")
     
 
 
