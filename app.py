@@ -99,8 +99,8 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
-    if request.method == "POST":
-
+    if request.method == "GET":
+        return render_template("register.html")
         username = request.form["username"]
         password = request.form["password"]
 
@@ -122,7 +122,7 @@ def register():
 
         return redirect("/login")
 
-    return render_template("register.html")
+    
 
 
 # ==========================
@@ -142,7 +142,7 @@ def logout():
 
 @app.route("/", methods=["GET", "POST"])
 def planner():
-
+    print("REQUEST:", request.method)
     if "user_id" not in session:
         return redirect("/login")
 
@@ -152,11 +152,10 @@ def planner():
         age = int(request.form["age"])
         height = float(request.form["height"])
         weight = float(request.form["weight"])
-
         goal = request.form["goal"]
         level = request.form["level"]
+        time = int(request.form["time"])
         equipment = request.form["equipment"]
-        time = request.form["time"]
 
         # BMI
         height_m = height / 100
