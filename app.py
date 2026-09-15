@@ -60,36 +60,6 @@ def save_progress(user_id, name, age, weight, bmi, score, goal):
     conn.close()
 
 
-# ==========================
-# LOGIN
-# ==========================
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-
-    if request.method == "POST":
-
-        username = request.form["username"]
-        password = request.form["password"]
-
-        conn = sqlite3.connect("fitness.db")
-        c = conn.cursor()
-
-        c.execute(
-            "SELECT * FROM users WHERE email=? AND password=?",
-            (username, password)
-        )
-
-        user = c.fetchone()
-        conn.close()
-
-        if user:
-            session["user_id"] = user[0]
-            return redirect("/")
-
-        return "Invalid Login"
-
-    return render_template("login.html")
 
 
 # ==========================
@@ -350,6 +320,12 @@ def dashboard():
 @app.route("/nutrition")
 def nutrition():
     return render_template("nutrition.html")
+@app.route("/login")
+def login():
+    return render_template("login.html")
+@app.route("/profile")
+def profile():
+    return render_template("profile.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
