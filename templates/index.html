@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FitAI Planner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="planner-container">
+
+<form method="POST" action="/">
+
+    <!-- Progress Bar -->
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Slide 1 -->
+    <div class="slide active">
+        <h1>🏋️ Welcome to FitAI</h1>
+        <p>Let's create your fitness plan.</p>
+
+        <button type="button" class="start-btn" onclick="nextSlide()">
+          Get Started
+        </button>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide">
+        <h1>👤 Personal Details</h1>
+
+        <input type="text" name="name" placeholder="Your Name" required>
+
+        <input type="number" name="age" placeholder="Age" required>
+
+        <div class="nav-buttons">
+            <button type="button" onclick="prevSlide()">Back</button>
+            <button type="button" onclick="nextSlide()">Next</button>
+        </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide">
+        <h1>📏 Body Measurements</h1>
+
+        <input type="number" name="height" placeholder="Height (cm)" required>
+
+        <input type="number" name="weight" placeholder="Weight (kg)" required>
+
+        <div class="nav-buttons">
+            <button type="button" onclick="prevSlide()">Back</button>
+            <button type="button" onclick="nextSlide()">Next</button>
+        </div>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="slide">
+        <h1>🎯 Choose Your Goal</h1>
+
+        <div class="option-grid">
+
+            <label class="option-card">
+                <input type="radio" name="goal" value="Weight Loss" required>
+                🔥 Weight Loss
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="goal" value="Muscle Gain">
+                💪 Muscle Gain
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="goal" value="Strength">
+                🏋️ Strength
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="goal" value="Flexibility">
+                🧘 Flexibility
+            </label>
+
+        </div>
+
+        <div class="nav-buttons">
+            <button type="button" onclick="prevSlide()">Back</button>
+            <button type="button" onclick="nextSlide()">Next</button>
+        </div>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="slide">
+        <h1>🏃 Fitness Level</h1>
+
+        <div class="option-grid">
+
+            <label class="option-card">
+                <input type="radio" name="level" value="Beginner" required>
+                Beginner
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="level" value="Intermediate">
+                Intermediate
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="level" value="Advanced">
+                Advanced
+            </label>
+
+        </div>
+
+        <div class="nav-buttons">
+            <button type="button" onclick="prevSlide()">Back</button>
+            <button type="button" onclick="nextSlide()">Next</button>
+        </div>
+    </div>
+
+    <!-- Slide 6 -->
+    <div class="slide">
+        <h1>🏋 Equipment</h1>
+
+        <div class="option-grid">
+
+            <label class="option-card">
+                <input type="radio" name="equipment" value="None" required>
+                None
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="equipment" value="Dumbbells">
+                Dumbbells
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="equipment" value="Resistance Bands">
+                Resistance Bands
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="equipment" value="Gym Access">
+                Gym Access
+            </label>
+
+        </div>
+
+        <div class="nav-buttons">
+            <button type="button" onclick="prevSlide()">Back</button>
+            <button type="button" onclick="nextSlide()">Next</button>
+        </div>
+    </div>
+
+    <!-- Slide 7 -->
+    <div class="slide">
+        <h1>⏱ Workout Duration</h1>
+
+        <div class="option-grid">
+
+            <label class="option-card">
+                <input type="radio" name="time" value="15" required>
+                15 Minutes
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="time" value="30">
+                30 Minutes
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="time" value="45">
+                45 Minutes
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="time" value="60">
+                60 Minutes
+            </label>
+
+        </div>
+
+        <div class="nav-buttons">
+            <button type="button" onclick="prevSlide()">Back</button>
+            <button type="submit" class="generate-btn">
+    🚀 Generate Plan
+</button>
+        </div>
+    </div>
+
+</form>
+
+</div>
+
+<script>
+let currentSlide = 0;
+const slides = document.querySelectorAll(".slide");
+
+function showSlide(index){
+    slides.forEach(slide => slide.classList.remove("active"));
+    slides[index].classList.add("active");
+
+    document.getElementById("progressBar").style.width =
+        ((index + 1) / slides.length) * 100 + "%";
+}
+
+function nextSlide(){
+    if(currentSlide < slides.length - 1){
+        currentSlide++;
+        showSlide(currentSlide);
+    }
+}
+
+function prevSlide(){
+    if(currentSlide > 0){
+        currentSlide--;
+        showSlide(currentSlide);
+    }
+}
+</script>
+
+</body>
+</html>

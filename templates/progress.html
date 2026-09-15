@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Progress Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/exercises">Exercise Library</a>
+    <a href="/nutrition">Nutrition Guide</a>
+    <a href="/about">About</a>
+    <a href="/progress">Progress</a>
+</nav>
+
+<div class="container">
+    <h1>📈 Progress Tracker</h1>
+<table border="1" width="100%">
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Weight</th>
+        <th>BMI</th>
+        <th>Score</th>
+        <th>Goal</th>
+        <th>Date</th>
+    </tr>
+
+    {% for record in records %}
+    <tr>
+        <td>{{ record[0] }}</td>
+        <td>{{ record[1] }}</td>
+        <td>{{ record[2] }}</td>
+        <td>{{ record[3] }}</td>
+        <td>{{ record[4] }}</td>
+        <td>{{ record[5] }}</td>
+        <td>{{ record[6] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<footer>
+    <p>FitAI © 2026 | Student Innovation Project</p>
+</footer>
+</body>
+</html>

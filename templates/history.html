@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FitAI History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="history-container">
+
+    <h1>🏆 Achievement History</h1>
+
+    <table>
+
+        <tr>
+            <th>User</th>
+            <th>Badge</th>
+            <th>Date</th>
+        </tr>
+
+        {% for item in achievements %}
+
+        <tr>
+            <td>{{ item[0] }}</td>
+            <td>{{ item[1] }}</td>
+            <td>{{ item[2] }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+</html>

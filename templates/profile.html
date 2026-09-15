@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitAI Profile</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="profile-container">
+
+    <div class="profile-header">
+
+        <div class="profile-avatar">
+            👤
+        </div>
+
+        <h1>My Profile</h1>
+
+        <p>Your personal fitness dashboard</p>
+
+    </div>
+
+    <div class="profile-grid">
+
+        <div class="profile-card">
+
+            <h2>🏷 Name</h2>
+            <p>{{ name if name else "Guest User" }}</p>
+
+        </div>
+
+        <div class="profile-card">
+
+            <h2>🎂 Age</h2>
+            <p>{{ age if age else "--" }}</p>
+
+        </div>
+
+        <div class="profile-card">
+
+            <h2>⚖ Weight</h2>
+            <p>{{ weight if weight else "--" }} kg</p>
+
+        </div>
+
+        <div class="profile-card">
+
+            <h2>🎯 Goal</h2>
+            <p>{{ goal if goal else "--" }}</p>
+
+        </div>
+
+        <div class="profile-card">
+
+            <h2>📊 BMI</h2>
+            <p>{{ bmi if bmi else "--" }}</p>
+
+        </div>
+
+        <div class="profile-card">
+
+            <h2>🏆 Fitness Score</h2>
+            <p>{{ score if score else "--" }}/100</p>
+
+        </div>
+
+    </div>
+
+    <div class="achievement-section">
+
+        <h2>🏅 Achievements</h2>
+
+        <div class="achievement-grid">
+
+            <div class="achievement-card">
+                🥇 First Workout
+            </div>
+
+            <div class="achievement-card">
+                🔥 7 Day Streak
+            </div>
+
+            <div class="achievement-card">
+                💪 Fitness Starter
+            </div>
+
+            <div class="achievement-card">
+                🚀 Goal Chaser
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="profile-actions">
+
+        <a href="/" class="profile-btn">
+            Create New Plan
+        </a>
+
+        <a href="/progress" class="profile-btn">
+            View Progress
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

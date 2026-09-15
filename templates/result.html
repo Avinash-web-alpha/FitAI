@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FitAI Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="result-container">
+
+    <!-- HEADER -->
+
+    <div class="dashboard-header">
+        <h1>🏋️ FitAI Fitness Report</h1>
+        <p>Welcome back, {{ name }}!</p>
+    </div>
+
+    <!-- METRICS -->
+
+    <div class="dashboard-cards">
+
+        <div class="metric-card">
+            <h3>BMI</h3>
+            <h1>{{ bmi }}</h1>
+            <p>{{ bmi_status }}</p>
+        </div>
+
+        <div class="metric-card">
+            <h3>Fitness Score</h3>
+            <h1>{{ score }}</h1>
+            <p>Out of 100</p>
+        </div>
+
+        <div class="metric-card">
+            <h3>Water Intake</h3>
+            <h1>{{ water }}L</h1>
+            <p>Daily Goal</p>
+        </div>
+
+        <div class="metric-card">
+            <h3>Calories</h3>
+            <h1>{{ calories }}</h1>
+            <p>Recommended</p>
+        </div>
+
+    </div>
+
+    <!-- CHART -->
+
+    <div class="chart-card">
+
+        <h2>📊 Fitness Overview</h2>
+
+        <canvas id="fitnessChart" height="120"></canvas>
+
+    </div>
+
+    <!-- PROFILE -->
+
+    <div class="profile-summary">
+
+        <h2>👤 Profile Summary</h2>
+
+        <div class="profile-grid">
+
+            <div class="profile-item">
+                <strong>Name</strong>
+                <span>{{ name }}</span>
+            </div>
+
+            <div class="profile-item">
+                <strong>Goal</strong>
+                <span>{{ goal }}</span>
+            </div>
+
+            <div class="profile-item">
+                <strong>Level</strong>
+                <span>{{ level }}</span>
+            </div>
+
+            <div class="profile-item">
+                <strong>Equipment</strong>
+                <span>{{ equipment }}</span>
+            </div>
+
+            <div class="profile-item">
+                <strong>Workout Time</strong>
+                <span>{{ time }} Minutes</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TWO COLUMN SECTION -->
+
+    <div class="plan-grid">
+
+        <!-- WORKOUT -->
+
+        <div class="workout-card">
+
+            <h2>💪 Workout Plan</h2>
+
+            <div class="workout-content">
+                {{ workout|safe }}
+            </div>
+
+        </div>
+
+        <!-- DIET -->
+
+        <div class="diet-card">
+
+            <h2>🥗 Nutrition Plan</h2>
+
+            <div class="diet-content">
+                {{ diet|safe }}
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ACHIEVEMENT -->
+
+    <div class="achievement-card">
+
+        <h2>🏆 Achievement Unlocked</h2>
+
+        <div class="badge-box">
+            {{ badge }}
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const ctx = document.getElementById('fitnessChart');
+
+new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+        labels: ['BMI','Fitness Score','Water ×10'],
+
+        datasets: [{
+            label: 'Health Metrics',
+
+            data: [
+                {{ bmi }},
+                {{ score }},
+                {{ water * 10 }}
+            ],
+
+            backgroundColor: [
+                '#00ff99',
+                '#00ccff',
+                '#ffcc00'
+            ],
+
+            borderRadius: 10
+        }]
+    },
+
+    options: {
+
+        responsive:true,
+
+        plugins:{
+            legend:{
+                display:false
+            }
+        }
+    }
+
+});
+
+</script>
+
+</body>
+</html>
