@@ -22,7 +22,7 @@
         <p>Let's create your fitness plan.</p>
 
         <button type="button" class="start-btn" onclick="nextSlide()">
-          Get Started
+            Get Started
         </button>
     </div>
 
@@ -31,7 +31,6 @@
         <h1>👤 Personal Details</h1>
 
         <input type="text" name="name" placeholder="Your Name" required>
-
         <input type="number" name="age" placeholder="Age" required>
 
         <div class="nav-buttons">
@@ -45,7 +44,6 @@
         <h1>📏 Body Measurements</h1>
 
         <input type="number" name="height" placeholder="Height (cm)" required>
-
         <input type="number" name="weight" placeholder="Weight (kg)" required>
 
         <div class="nav-buttons">
@@ -180,11 +178,11 @@
         </div>
 
         <div class="nav-buttons">
-            <input type="hidden" name="name" value="test">
+            <button type="button" onclick="prevSlide()">Back</button>
 
-          <button type="submit" class="generate-btn">
-            🚀 Generate Plan
-          </button>
+            <button type="submit" class="generate-btn">
+                🚀 Generate Plan
+            </button>
         </div>
     </div>
 
@@ -195,28 +193,33 @@
 <script>
 let currentSlide = 0;
 const slides = document.querySelectorAll(".slide");
+const progressBar = document.getElementById("progressBar");
 
-function showSlide(index){
+function showSlide(index) {
     slides.forEach(slide => slide.classList.remove("active"));
     slides[index].classList.add("active");
 
-    document.getElementById("progressBar").style.width =
-        ((index + 1) / slides.length) * 100 + "%";
+    if(progressBar){
+        progressBar.style.width =
+            ((index + 1) / slides.length) * 100 + "%";
+    }
 }
 
-function nextSlide(){
+function nextSlide() {
     if(currentSlide < slides.length - 1){
         currentSlide++;
         showSlide(currentSlide);
     }
 }
 
-function prevSlide(){
+function prevSlide() {
     if(currentSlide > 0){
         currentSlide--;
         showSlide(currentSlide);
     }
 }
+
+showSlide(0);
 </script>
 
 </body>
