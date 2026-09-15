@@ -102,7 +102,7 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
 
-    username = request.form["username"]
+    email = request.form["email"]
     password = request.form["password"]
 
     conn = sqlite3.connect("fitness.db")
@@ -110,13 +110,13 @@ def register():
 
     try:
         c.execute(
-            "INSERT INTO users(email,password) VALUES (?,?)",
-            (username, password)
+            "INSERT INTO users(email, password) VALUES (?, ?)",
+            (email, password)
         )
         conn.commit()
 
-    except:
-        return "Username already exists"
+    except Exception as e:
+        return str(e)
 
     finally:
         conn.close()
